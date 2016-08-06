@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="David Rodr&iacute;guez Condezo">
+	<meta name="author" content="David Rodr&iacute;guez Condezo">
+
+	<title>Curso Cordova</title>
+
+	<link rel="stylesheet" href="css/tema1.css">
+	<link rel="stylesheet" href="css/jquery.mobile.icons.min.css">
+	<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css">
+
+	<script src="js/jquery-1.12.4.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script src="cordova.js"></script>
+
+	<script type="text/javascript" charset="utf-8">
+		function iniciar() {
+			document.addEventListener("deviceready", dispositivoListo, false);
+		}
+
+		function dispositivoListo() {
+
+		}
+
+	    function buscarProducto(){
+	    	$.ajaxSetup({ cache: false });
+	    	$('#lstResultado').empty();
+	    	var criterio = $("#txtCriterio").val();
+		    console.log("debug 1");
+		    $.getJSON("http://www.renzovilela.tk/rest/productos/"+criterio, null, function(data){
+		    	console.log("debug 2: " + data.status);
+		    	console.log("debug 3: " + data.length);
+				for (var i = 0; i < data.length; i++) {
+				    var objeto = data[i];
+				    $('#lstResultado').append('<li><a href="#" onclick="abrirDetalle('+objeto.idProducto+')">'+objeto.nombre+'</a></li>');
+				    $('#lstResultado').listview('refresh');
+				}
+	    	});
+
+	    }
+
+	    function abrirDetalle(id){
+	    	//alert(id);
+	    	window.localStorage.setItem("idProd", id);
+	    	window.location.assign("producto_detalle.html");
+	    }
+	</script>
+
+
+</head>
+<body onload="iniciar()">
+
+<div data-role="page">
+	<div data-role="header" data-position="fixed">
+		<h1>Curso Cordova</h1>
+	</div>
+
+	<div data-role="content">
+		<label for="input_user">Buscar:</label>
+		<input type="text" name="txtCriterio" id="txtCriterio" placeholder="Escriba el nombre..." class="required"/>
+
+		<a data-role="button" data-inline="true" data-align="true" onclick="buscarProducto()">Buscar</a>
+		<a data-role="button" href="producto_nuevo.html" data-inline="true" rel="external">Nuevo Producto</a>
+
+		<hr/>
+
+		<ul data-role="listview" id="lstResultado"></ul>
+	</div>
+
+	<div data-role="footer" data-position="fixed">
+		<p align="center">
+			<small>RCondezo &copy; 2015</small>
+		</p>
+	</div>
+</div>
+
+</body>
+</html>

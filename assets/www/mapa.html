@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="David Rodr&iacute;guez Condezo">
+	<meta name="author" content="David Rodr&iacute;guez Condezo">
+
+	<title>Curso Cordova</title>
+
+	<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css">
+	<style type="text/css">
+		html { height: 100% }
+		body { height: 100%; margin: 0; padding: 0 }
+		#map_canvas { height: 100% }
+	</style>
+
+	<script src="js/jquery-1.12.4.min.js"></script>
+
+	<script src="cordova.js"></script>
+
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+	<script type="text/javascript">
+	var map;
+	var marcador;
+
+	function iniciar() {
+		document.addEventListener("deviceready", dispositivoListo, false);
+	}
+
+	function dispositivoListo() {
+		//navigator.notification.alert("Se recomienda activar el GPS", function() {});
+		var latlng = new google.maps.LatLng(-12.0459335,-77.0300898);
+		var myOptions = {
+		      zoom: 18,
+		      center: latlng,
+		      mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+		marcador1 = new google.maps.Marker({
+			position: latlng,
+			map: map,
+			icon: new google.maps.MarkerImage('img/marcador.png'),
+			title: 'Municipio'
+		});
+
+		info = new google.maps.InfoWindow();
+
+		(function(marcador1){
+		google.maps.event.addListener(marcador1, "click", function(e) {
+			  info.setContent("<b>Municipalidad de Ate</b><br/>");
+			  info.open(map, marcador1);
+			});
+		})(marcador1);
+
+	}
+
+	function regresar(){
+		window.location.assign('index.html');
+	}
+	</script>
+
+</head>
+
+<body onload="iniciar()">
+<div id="map_canvas" style="width:100%; height:95%"></div>
+<button class="button medium" onClick="regresar()">Regresar</button>
+</body>
+
+</html>
